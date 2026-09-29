@@ -4,7 +4,7 @@
 
 A small SwiftUI app that drives [**ConcurrencyMigrationKit**](https://github.com/rajatslakhina/concurrency-migration-kit) against a realistic twelve-module commerce app part-way through the move to Swift 6.
 
-The library is consumed here the way anyone else would consume it: as a **remote Swift package, pinned to a released version**. There is no local path reference and no `branch = main` anywhere in `project.pbxproj` — the project resolves `https://github.com/rajatslakhina/concurrency-migration-kit.git` at `upToNextMajorVersion` from `1.0.0`, exactly as a real consumer would.
+The library is consumed here the way anyone else would consume it: as a **remote Swift package, pinned to a released version**. There is no local path reference and no `branch = main` anywhere in `project.pbxproj` — the project resolves `https://github.com/rajatslakhina/concurrency-migration-kit.git` at `upToNextMajorVersion` from `1.2.0`, exactly as a real consumer would.
 
 ## Why this matters
 
@@ -28,10 +28,10 @@ The pipeline that produced this repo requested control of the machine to open th
 
 These are two different statements and only one of them is true today:
 
-- ✅ **This app compiles against the released package for an iOS Simulator destination.** The [CI job](https://github.com/rajatslakhina/concurrency-migration-kit-demo-app/actions) runs `xcodebuild -resolvePackageDependencies` — which proves the pinned remote package genuinely resolves from GitHub, rather than only that a URL was typed correctly — prints the resolved `Package.resolved`, and then runs `xcodebuild build -scheme Demo -destination 'generic/platform=iOS Simulator'`. That job is green on the current commit; if you are reading this from a fork or a branch where it has not run, the Actions tab above is the authority, not this sentence.
+- ✅ **This app compiles against the released package for an iOS Simulator destination.** The [CI job](https://github.com/rajatslakhina/concurrency-migration-kit-demo-app/actions) runs `xcodebuild -resolvePackageDependencies` — which proves the pinned remote package genuinely resolves from GitHub, rather than only that a URL was typed correctly — prints the resolved `Package.resolved`, and then runs `xcodebuild build -scheme Demo -destination 'generic/platform=iOS Simulator'`. The package reference is pinned at `upToNextMajorVersion` from `1.2.0`, so the job resolves the library release of the same name. The Actions tab above is the authority on any given commit, not this sentence.
 - ❌ **This app has never been launched on a Simulator.** Not by CI, which compiles only, and not by a human, for the reason above. "It builds for a Simulator" is not "it ran on a Simulator," and this README will not pretend otherwise.
 
-The library's own logic is separately covered by 56 XCTest cases that genuinely run, and its CI additionally compiles the SwiftUI target for an iOS Simulator destination — see the [package repository](https://github.com/rajatslakhina/concurrency-migration-kit) and its [Actions tab](https://github.com/rajatslakhina/concurrency-migration-kit/actions).
+The library's own logic is separately covered by 67 XCTest cases that genuinely run, and its CI additionally compiles the SwiftUI target for iOS Simulator and macOS — see the [package repository](https://github.com/rajatslakhina/concurrency-migration-kit) and its [Actions tab](https://github.com/rajatslakhina/concurrency-migration-kit/actions).
 
 The CI destination is `generic/platform=iOS Simulator` rather than a named device on purpose: pinning to `name=iPhone 16,OS=latest` ties the job to whichever simulator *runtimes* happen to be installed on that day's runner image, and they are not guaranteed. A compile-only check needs no device to exist.
 
@@ -43,7 +43,7 @@ cd concurrency-migration-kit-demo-app
 open Demo.xcodeproj
 ```
 
-Then: let Xcode resolve the remote package (it fetches the latest `1.x` of `concurrency-migration-kit`, per the `upToNextMajorVersion` pin), select the shared **Demo** scheme, pick any iOS 17+ Simulator, and Build & Run. The scheme is committed under `Demo.xcodeproj/xcshareddata/xcschemes/`, so it is selectable on a fresh clone without configuration.
+Then: let Xcode resolve the remote package (it fetches `concurrency-migration-kit` 1.2.0 or the latest 1.x above it, per the `upToNextMajorVersion` pin), select the shared **Demo** scheme, pick any iOS 17+ Simulator, and Build & Run. The scheme is committed under `Demo.xcodeproj/xcshareddata/xcschemes/`, so it is selectable on a fresh clone without configuration.
 
 Nothing is code-signed (`CODE_SIGNING_ALLOWED = NO`), so a Simulator build needs no team or certificate.
 
