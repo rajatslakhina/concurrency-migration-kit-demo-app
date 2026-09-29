@@ -11,8 +11,9 @@ import ConcurrencyMigrationKitUI
 /// manifests and a checked-in ledger file instead.
 enum DemoFleet {
 
-    /// The date the audit is run against. Fixed rather than `.now` so the screenshot in
-    /// the README and the state you see on launch are the same thing, forever.
+    /// The date the audit is run against. Fixed rather than `.now` so what CI builds and
+    /// what you see on launch are the same thing, forever — an audit keyed on the wall
+    /// clock would quietly change its own findings as review dates passed.
     static let referenceDate = day(2026, 9, 29)
 
     /// A mid-sized commerce app, part-way through the move to Swift 6.
